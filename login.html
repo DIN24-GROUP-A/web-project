@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ExcavatorPro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #222;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            background: #333;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        .btn-custom {
+            background: #ffcc00;
+            color: #222;
+            font-weight: bold;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .btn-custom:hover {
+            background: #ffaa00;
+        }
+        .btn-google {
+            background: #fff;
+            color: #222;
+            font-weight: bold;
+            border-radius: 5px;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+        .btn-google:hover {
+            background: #f1f1f1;
+        }
+        .form-control {
+            background: #444;
+            border: none;
+            color: #fff;
+        }
+        .form-control::placeholder {
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container text-center">
+        <h2 class="mb-4">Login to ........</h2>
+        <form>
+            <div class="mb-3">
+                <input type="email" class="form-control" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control" placeholder="Password" required>
+            </div>
+            <button type="submit" class="btn btn-custom mb-3">Login</button>
+            <button type="button" class="btn btn-google mb-3">Continue with Google</button>
+            <p><a href="#" class="text-warning">Forgot password?</a></p>
+            <p>Don't have an account? <a href="#" class="text-warning">Sign up</a></p>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
