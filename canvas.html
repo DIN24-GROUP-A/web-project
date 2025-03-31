@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Concrete Reinforcement Editor</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div id="side-panel">
+			<h3>Available Rebars</h3>
+			<!-- Draggable rebar icons -->
+			<div class="rebar-icon" draggable="true" data-diameter="16">16mm</div>
+			<div class="rebar-icon" draggable="true" data-diameter="20">20mm</div>
+			<div class="rebar-icon" draggable="true" data-diameter="25">25mm</div>
+		</div>
+
+		<div id="main-area">
+			<!-- Canvas for the cross-section and rebars -->
+			<canvas id="myCanvas" width="600" height="400"></canvas>
+		</div>
+
+		<div id="properties-panel">
+			<h3>Concrete Cross-Section</h3>
+			<div class="dimension-fields">
+				<label for="widthInput">Width:</label>
+				<input id="widthInput" type="number" step="1" value="500" />
+
+				<label for="heightInput">Height:</label>
+				<input id="heightInput" type="number" step="1" value="300" />
+			</div>
+
+			<h3>Rebar List</h3>
+			<table id="rebarTable">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>X</th>
+						<th>Y</th>
+						<th>Diameter</th>
+					</tr>
+				</thead>
+				<tbody><!-- Populated dynamically --></tbody>
+			</table>
+		</div>
+
+		<script src="js/canvas.js"></script>
+	</body>
+</html>
