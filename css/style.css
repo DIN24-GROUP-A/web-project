@@ -35,7 +35,7 @@ body {
 }
 
 #properties-panel {
-	width: 250px;
+	width: 300px;
 	background: #fafafa;
 	border-left: 1px solid #ddd;
 	padding: 10px;
@@ -68,7 +68,6 @@ body {
 .dimension-fields {
 	margin-bottom: 1em;
 }
-
 .dimension-fields label {
 	display: inline-block;
 	width: 50px;
@@ -76,4 +75,16 @@ body {
 .dimension-fields input {
 	width: 60px;
 	margin-right: 10px;
+}
+
+/* Minimal reinforcement panel */
+.min-reinf-panel {
+	border: 1px solid #ddd;
+	padding: 5px;
+	margin-top: 10px;
+}
+.min-reinf-panel label,
+.min-reinf-panel select {
+	display: block;
+	margin-bottom: 4px;
 }
