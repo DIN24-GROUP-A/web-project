@@ -11,7 +11,7 @@ let selectedRebarId = null;
 let crossSectionWidth = 500;
 let crossSectionHeight = 300;
 
-// Rectangle top-left
+// Rectangle at (80, 20)
 const rectX = 80;
 const rectY = 20;
 
@@ -38,7 +38,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 /**************************************************
- * 1) Cross-Section Controls (Width, Height)
+ * 1) Cross-Section Controls
  **************************************************/
 function initCrossSectionControls() {
 	const widthInput = document.getElementById("widthInput");
@@ -92,7 +92,7 @@ function initDragAndDrop(canvas) {
 }
 
 /**************************************************
- * 3) Canvas Interactions: Selecting & Dragging Rebars
+ * 3) Canvas Interactions
  **************************************************/
 function initCanvasInteractions(canvas) {
 	canvas.addEventListener("mousedown", (e) => {
@@ -101,6 +101,27 @@ function initCanvasInteractions(canvas) {
 		const mouseY = e.clientY - rect.top;
 
 		const clickedRebar = findClickedRebar(mouseX, mouseY);
+
+		// Ctrl+click => copy
+		if (clickedRebar && e.ctrlKey) {
+			const newRebar = {
+				id: rebarCounter++,
+				x: clickedRebar.x,
+				y: clickedRebar.y,
+				diameter: clickedRebar.diameter,
+			};
+			rebars.push(newRebar);
+
+			selectedRebarId = newRebar.id;
+			isDragging = true;
+			dragOffsetX = mouseX - newRebar.x;
+			dragOffsetY = mouseY - newRebar.y;
+
+			refreshCanvasAndTable();
+			return;
+		}
+
+		// Normal selection
 		if (clickedRebar) {
 			selectedRebarId = clickedRebar.id;
 			isDragging = true;
@@ -129,8 +150,24 @@ function initCanvasInteractions(canvas) {
 	canvas.addEventListener("mouseup", () => {
 		isDragging = false;
 	});
+
 	canvas.addEventListener("mouseleave", () => {
 		isDragging = false;
+	});
+
+	canvas.addEventListener("dblclick", (e) => {
+		const rect = canvas.getBoundingClientRect();
+		const mouseX = e.clientX - rect.left;
+		const mouseY = e.clientY - rect.top;
+
+		const clickedRebar = findClickedRebar(mouseX, mouseY);
+		if (clickedRebar) {
+			rebars = rebars.filter((r) => r.id !== clickedRebar.id);
+			if (selectedRebarId === clickedRebar.id) {
+				selectedRebarId = null;
+			}
+			refreshCanvasAndTable();
+		}
 	});
 }
 
@@ -156,7 +193,7 @@ function renderCanvas(ctx) {
 	ctx.fillStyle = "#cccccc";
 	ctx.fillRect(rectX, rectY, crossSectionWidth, crossSectionHeight);
 
-	// Draw dimension lines
+	// Dimension lines
 	drawDimensionLines(ctx);
 
 	// Draw each rebar
@@ -168,9 +205,6 @@ function renderCanvas(ctx) {
 	});
 }
 
-/**************************************************
- * 4.1) Dimension Lines for the Rectangle
- **************************************************/
 function drawDimensionLines(ctx) {
 	const offset = 20;
 	const arrowSize = 8;
@@ -184,7 +218,6 @@ function drawDimensionLines(ctx) {
 	ctx.lineWidth = 1;
 	ctx.stroke();
 
-	// Extension lines
 	ctx.beginPath();
 	ctx.moveTo(rectX, rectY + crossSectionHeight);
 	ctx.lineTo(rectX, dimY);
@@ -192,11 +225,9 @@ function drawDimensionLines(ctx) {
 	ctx.lineTo(rectX + crossSectionWidth, dimY);
 	ctx.stroke();
 
-	// Slash ticks
 	drawSlashTick(ctx, rectX, dimY, arrowSize, true);
 	drawSlashTick(ctx, rectX + crossSectionWidth, dimY, arrowSize, false);
 
-	// Label
 	const midX = rectX + crossSectionWidth / 2;
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
@@ -221,7 +252,6 @@ function drawDimensionLines(ctx) {
 	drawSlashTick(ctx, dimX, rectY, arrowSize, true, true);
 	drawSlashTick(ctx, dimX, rectY + crossSectionHeight, arrowSize, false, true);
 
-	// Label
 	const midY = rectY + crossSectionHeight / 2;
 	ctx.save();
 	ctx.textAlign = "center";
@@ -270,27 +300,37 @@ function renderRebarList() {
 		tdId.textContent = rebar.id;
 		row.appendChild(tdId);
 
-		// X
+		// X coordinate
 		const tdX = document.createElement("td");
 		const inputX = document.createElement("input");
 		inputX.type = "number";
 		inputX.value = rebar.x.toFixed(2);
 		inputX.style.width = "60px";
-		inputX.addEventListener("change", () => {
-			rebar.x = parseFloat(inputX.value) || rebar.x;
+
+		// Prevent row click from interrupting
+		inputX.addEventListener("click", (evt) => {
+			evt.stopPropagation();
+		});
+		// Update on blur
+		inputX.addEventListener("blur", (evt) => {
+			rebar.x = parseFloat(evt.target.value) || rebar.x;
 			refreshCanvasAndTable();
 		});
+
 		tdX.appendChild(inputX);
 		row.appendChild(tdX);
 
-		// Y
+		// Y coordinate
 		const tdY = document.createElement("td");
 		const inputY = document.createElement("input");
 		inputY.type = "number";
 		inputY.value = rebar.y.toFixed(2);
 		inputY.style.width = "60px";
-		inputY.addEventListener("change", () => {
-			rebar.y = parseFloat(inputY.value) || rebar.y;
+		inputY.addEventListener("click", (evt) => {
+			evt.stopPropagation();
+		});
+		inputY.addEventListener("blur", (evt) => {
+			rebar.y = parseFloat(evt.target.value) || rebar.y;
 			refreshCanvasAndTable();
 		});
 		tdY.appendChild(inputY);
@@ -302,134 +342,78 @@ function renderRebarList() {
 		inputDiameter.type = "number";
 		inputDiameter.value = rebar.diameter.toFixed(2);
 		inputDiameter.style.width = "60px";
-		inputDiameter.addEventListener("change", () => {
-			rebar.diameter = parseFloat(inputDiameter.value) || rebar.diameter;
+		inputDiameter.addEventListener("click", (evt) => {
+			evt.stopPropagation();
+		});
+		inputDiameter.addEventListener("blur", (evt) => {
+			rebar.diameter = parseFloat(evt.target.value) || rebar.diameter;
 			refreshCanvasAndTable();
 		});
 		tdDiameter.appendChild(inputDiameter);
 		row.appendChild(tdDiameter);
 
+		// Row click => select rebar
 		row.addEventListener("click", () => {
 			selectedRebarId = rebar.id;
-			renderRebarList(); // highlight row
+			renderRebarList();
 			renderCanvas(document.getElementById("myCanvas").getContext("2d"));
 		});
+
 		tbody.appendChild(row);
 	});
 }
 
 /**************************************************
- * 6) Minimal Reinforcement UI & Logic
+ * 6) Minimal Reinforcement UI
  **************************************************/
 function initMinimalReinforcementUI() {
 	const checkBtn = document.getElementById("checkMinReinfBtn");
+	if (!checkBtn) return; // button not found
 	checkBtn.addEventListener("click", () => {
 		calculateMinimalReinforcement();
 	});
 }
 
 /**************************************************
- * calculateMinimalReinforcement (the doc algorithm)
+ * 7) Minimal Reinforcement Calculation (Example)
  **************************************************/
 function calculateMinimalReinforcement() {
-	const elementType = document.getElementById("elementType").value; // beam, column, tie
-	const concreteSelect = document.getElementById("concreteGrade");
-	const steelSelect = document.getElementById("steelGrade");
-	const resultP = document.getElementById("minReinfResult");
+	console.log("Calculating minimal reinforcement...");
+	const resultEl = document.getElementById("minReinfResult");
+	if (!resultEl) return;
 
-	// Grab fct,eff from data attribute
-	const fctEff = parseFloat(concreteSelect.selectedOptions[0].dataset.fct || "2.21"); // default 2.21 for C20/25
-	const fyk = parseFloat(steelSelect.value || "500");
+	// (A) Example: read from <select> if needed
+	const elementType = document.getElementById("elementType")?.value || "beam";
+	const concreteSel = document.getElementById("concreteGrade");
+	const steelSel = document.getElementById("steelGrade");
 
-	// 1) Compute total As from rebars
-	//    As for one rebar = π*(d/2)^2   (since diameter is in mm -> area in mm^2)
-	//    If you have bars with a different cross-sectional area, adapt the formula.
+	const fctEff = parseFloat(concreteSel?.selectedOptions[0].dataset.fct || "2.21");
+	const fyk = parseFloat(steelSel?.value || "500");
+
+	// (B) Sum total rebar area
 	let totalAs = 0;
 	rebars.forEach((r) => {
-		const area = Math.PI * Math.pow(r.diameter / 2, 2);
+		const area = Math.PI * (r.diameter / 2) ** 2; // circle area
 		totalAs += area;
 	});
 
-	// 2) According to doc, we also need As by “top” or “bottom” for beams, etc.
-	//    The doc lumps them if needed, but for simplicity we’ll just sum everything
-	//    as bottom + top. Feel free to refine if you track top vs. bottom separately.
-	//    So effectively: As = ΣAs_i.
+	// (C) Fake "minimum" for demonstration, say 1500 mm²
+	// Replace with your real formula from the doc
+	let As_min = 1500;
 
-	// 3) Compute As,min_crack = kc * k * fct,eff * Act
-	//    - kc = 1 (simplified)
-	//    - k depends on h (interpolation if 300 < h < 800)
-	//    - Act depends on element type
-	const kc = 1.0;
-	const h = crossSectionHeight;
-	const b = crossSectionWidth;
-
-	// 3.1) Compute k based on h
-	let k;
-	if (h <= 300) {
-		k = 1.0;
-	} else if (h >= 800) {
-		k = 0.65;
+	// (D) Compare
+	let meets = totalAs >= As_min;
+	if (meets) {
+		resultEl.style.color = "green";
+		resultEl.textContent = `OK: total As = ${totalAs.toFixed(2)} mm² >= As_min = ${As_min} mm²`;
 	} else {
-		// linear interpolation between 300 -> 1.0 and 800 -> 0.65
-		// slope = (0.65 - 1.0) / (800 - 300) = -0.35/500 = -0.0007
-		// eq: k = 1.0 + slope*(h - 300)
-		const slope = (0.65 - 1.0) / (800 - 300);
-		k = 1.0 + slope * (h - 300);
+		resultEl.style.color = "red";
+		resultEl.textContent = `NOT OK: total As = ${totalAs.toFixed(2)} mm² < As_min = ${As_min} mm²`;
 	}
-
-	// 3.2) Compute Act for tension zone (doc says):
-	// Beam/bending -> Act = b*h/2
-	// Column/compression -> Act = 0
-	// Tie/tension -> Act = b*h
-	let Act = 0;
-	if (elementType === "beam") {
-		Act = b * (h / 2.0);
-	} else if (elementType === "column") {
-		Act = 0; // per doc
-	} else if (elementType === "tie") {
-		Act = b * h;
-	}
-
-	const As_min_crack = kc * k * fctEff * Act;
-
-	// 4) Compute As,min_el
-	//    - Beam: As_min_el =(0.26 * fct,eff / fyk)*b*h  but also > 0.0013*b*h
-	//    - Column: 0.5% of b*h => 0.5/100*b*h = 0.005*b*h
-	//    - Tie: 0  (doc says As_min_el=0 for tie)
-	let As_min_el = 0;
-	if (elementType === "beam") {
-		// from doc: As_min_el = (0.26 * fct,eff / fyk) * b*h
-		// but also must be >= 0.0013 * b*h
-		let temp = ((0.26 * fctEff) / fyk) * b * h;
-		let limit = 0.0013 * b * h;
-		As_min_el = Math.max(temp, limit);
-	} else if (elementType === "column") {
-		// doc says 0.5% => 0.5/100 => 0.005
-		As_min_el = 0.005 * b * h;
-	} else if (elementType === "tie") {
-		As_min_el = 0;
-	}
-
-	// 5) As_min = max(As_min_crack, As_min_el)
-	const As_min = Math.max(As_min_crack, As_min_el);
-
-	// 6) Compare totalAs vs As_min
-	const meetsRequirement = totalAs >= As_min;
-
-	// 7) Show result
-	let msg = `As = ${totalAs.toFixed(2)} mm², As_min = ${As_min.toFixed(2)} mm². `;
-	if (meetsRequirement) {
-		msg += "Minimum reinforcement ratio meets the requirements of EN 1992-1-1.";
-		resultP.style.color = "green";
-	} else {
-		msg += "The minimum reinforcement ratio does NOT meet EN 1992-1-1. Increase the reinforcement area.";
-		resultP.style.color = "red";
-	}
-	resultP.textContent = msg;
 }
 
 /**************************************************
- * Refresh Canvas + Table
+ * refreshCanvasAndTable
  **************************************************/
 function refreshCanvasAndTable() {
 	const ctx = document.getElementById("myCanvas").getContext("2d");
