@@ -3,7 +3,8 @@ import { appState } from "./data.js";
 import { refreshCanvasAndTable } from "./main.js";
 
 /**
- * Populate the <table> with current rebars from appState.
+ * Renders the <table> rows for each rebar in appState.
+ * Also handles editing coordinates/diameter on blur.
  */
 export function renderRebarList() {
 	const tbody = document.querySelector("#rebarTable tbody");
@@ -21,14 +22,12 @@ export function renderRebarList() {
 		tdId.textContent = rebar.id;
 		row.appendChild(tdId);
 
-		// X cell
+		// X, Y, Diameter
 		row.appendChild(makeCoordCell(rebar, "x"));
-		// Y cell
 		row.appendChild(makeCoordCell(rebar, "y"));
-		// Diameter cell
 		row.appendChild(makeCoordCell(rebar, "diameter"));
 
-		// Clicking row => select rebar
+		// Row click => select rebar
 		row.addEventListener("click", () => {
 			appState.selectedRebarId = rebar.id;
 			renderRebarList(); // highlight row
@@ -39,26 +38,17 @@ export function renderRebarList() {
 	});
 }
 
-/**
- * Helper function that creates a <td> with an <input>
- * that edits a numeric field of the rebar (x, y, or diameter).
- */
 function makeCoordCell(rebar, key) {
 	const td = document.createElement("td");
 	const input = document.createElement("input");
 	input.type = "number";
 	input.style.width = "60px";
+	input.value = rebar[key].toFixed(2);
 
-	// Show the current value
-	let val = rebar[key];
-	input.value = val.toFixed(2);
+	// Prevent row click from interfering
+	input.addEventListener("click", (e) => e.stopPropagation());
 
-	// Stop row click from interfering
-	input.addEventListener("click", (e) => {
-		e.stopPropagation();
-	});
-
-	// On blur, parse new value and update
+	// On blur => parse new value
 	input.addEventListener("blur", (e) => {
 		let newVal = parseFloat(e.target.value);
 		if (!isNaN(newVal)) {

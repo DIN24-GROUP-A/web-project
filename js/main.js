@@ -4,9 +4,6 @@ import { initCanvasInteractions, renderCanvas } from "./canvasActions.js";
 import { renderRebarList } from "./rebarTable.js";
 import { calculateMinimalReinforcement } from "./minimalReinforcement.js";
 
-/**
- * Called on DOMContentLoaded to wire up the UI
- */
 window.addEventListener("DOMContentLoaded", () => {
 	initCrossSectionControls();
 
@@ -17,9 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	}
 
 	initMinimalReinforcementUI();
-
-	// Initial rendering
-	refreshCanvasAndTable();
+	refreshCanvasAndTable(); // initial render
 });
 
 /**************************************************
@@ -28,7 +23,6 @@ window.addEventListener("DOMContentLoaded", () => {
 function initCrossSectionControls() {
 	const widthInput = document.getElementById("widthInput");
 	const heightInput = document.getElementById("heightInput");
-
 	if (widthInput) {
 		widthInput.addEventListener("change", () => {
 			appState.crossSectionWidth = parseFloat(widthInput.value) || 500;
@@ -47,7 +41,6 @@ function initCrossSectionControls() {
  * Drag-and-Drop for adding new rebars
  **************************************************/
 function initDragAndDrop(canvas) {
-	// Make sure to handle .rebar-icon elements
 	document.querySelectorAll(".rebar-icon").forEach((icon) => {
 		icon.addEventListener("dragstart", (e) => {
 			const diameter = icon.dataset.diameter;
@@ -66,13 +59,13 @@ function initDragAndDrop(canvas) {
 		const mouseY = e.clientY - rect.top;
 		const diameter = parseFloat(e.dataTransfer.getData("diameter") || "16");
 
-		// Create new rebar
+		// Create a new rebar
 		const newId = appState.rebarCounter++;
 		const newRebar = {
 			id: newId,
 			x: mouseX,
 			y: mouseY,
-			diameter: diameter,
+			diameter,
 		};
 		appState.rebars.push(newRebar);
 
@@ -94,7 +87,7 @@ function initMinimalReinforcementUI() {
 }
 
 /**************************************************
- * Re-render the canvas & table
+ * Re-render canvas + table
  **************************************************/
 export function refreshCanvasAndTable() {
 	const canvas = document.getElementById("myCanvas");

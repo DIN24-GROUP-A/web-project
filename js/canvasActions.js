@@ -3,10 +3,8 @@ import { appState, getNextRebarId, findClickedRebar } from "./data.js";
 import { refreshCanvasAndTable } from "./main.js";
 
 /**
- * Initialize all mouse interactions on the canvas:
- * - mousedown to select or copy rebar
- * - mousemove to drag
- * - double-click to remove
+ * Sets up all mouse interactions on the canvas:
+ * - dragging, selecting, double-click to remove, ctrl+click to copy
  */
 export function initCanvasInteractions(canvas) {
 	canvas.addEventListener("mousedown", (e) => {
@@ -16,7 +14,7 @@ export function initCanvasInteractions(canvas) {
 
 		const clickedRebar = findClickedRebar(mouseX, mouseY);
 
-		// Ctrl + click => copy rebar
+		// Ctrl+click => copy rebar
 		if (clickedRebar && e.ctrlKey) {
 			copyRebar(clickedRebar, mouseX, mouseY);
 			return;
@@ -60,7 +58,6 @@ export function initCanvasInteractions(canvas) {
 		const rect = canvas.getBoundingClientRect();
 		const mouseX = e.clientX - rect.left;
 		const mouseY = e.clientY - rect.top;
-
 		const clickedRebar = findClickedRebar(mouseX, mouseY);
 		if (clickedRebar) {
 			removeRebar(clickedRebar);
@@ -69,8 +66,7 @@ export function initCanvasInteractions(canvas) {
 }
 
 /**
- * Copy a rebar (Ctrl+click): create a new rebar at same coords & diameter,
- * and start dragging it.
+ * Copies the clicked rebar if user does ctrl+click.
  */
 function copyRebar(clickedRebar, mouseX, mouseY) {
 	const newId = getNextRebarId();
@@ -82,7 +78,6 @@ function copyRebar(clickedRebar, mouseX, mouseY) {
 	};
 	appState.rebars.push(newRebar);
 
-	// Select & drag the new rebar
 	appState.selectedRebarId = newId;
 	appState.isDragging = true;
 	appState.dragOffsetX = mouseX - newRebar.x;
@@ -92,7 +87,7 @@ function copyRebar(clickedRebar, mouseX, mouseY) {
 }
 
 /**
- * Remove a rebar from the array, if found.
+ * Removes a rebar from the array.
  */
 function removeRebar(rebarToRemove) {
 	appState.rebars = appState.rebars.filter((r) => r.id !== rebarToRemove.id);
@@ -103,7 +98,7 @@ function removeRebar(rebarToRemove) {
 }
 
 /**
- * Draw the rectangle, dimension lines, and all rebars.
+ * Draw the rectangle, dimension lines, and all rebars on the canvas.
  */
 export function renderCanvas(ctx) {
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -112,10 +107,10 @@ export function renderCanvas(ctx) {
 	ctx.fillStyle = "#cccccc";
 	ctx.fillRect(appState.rectX, appState.rectY, appState.crossSectionWidth, appState.crossSectionHeight);
 
-	// Draw dimension lines
+	// Dimension lines
 	drawDimensionLines(ctx);
 
-	// Draw rebars
+	// Rebars
 	appState.rebars.forEach((rebar) => {
 		ctx.fillStyle = rebar.id === appState.selectedRebarId ? "red" : "blue";
 		ctx.beginPath();
@@ -124,9 +119,6 @@ export function renderCanvas(ctx) {
 	});
 }
 
-/**
- * Draw dimension lines + labels around the rectangle
- */
 function drawDimensionLines(ctx) {
 	const offset = 20;
 	const arrowSize = 8;
@@ -151,6 +143,7 @@ function drawDimensionLines(ctx) {
 	drawSlashTick(ctx, rectX, dimY, arrowSize, true);
 	drawSlashTick(ctx, rectX + crossSectionWidth, dimY, arrowSize, false);
 
+	// Label the width
 	const midX = rectX + crossSectionWidth / 2;
 	ctx.textAlign = "center";
 	ctx.textBaseline = "bottom";
@@ -175,6 +168,7 @@ function drawDimensionLines(ctx) {
 	drawSlashTick(ctx, dimX, rectY, arrowSize, true, true);
 	drawSlashTick(ctx, dimX, rectY + crossSectionHeight, arrowSize, false, true);
 
+	// Label the height
 	const midY = rectY + crossSectionHeight / 2;
 	ctx.save();
 	ctx.textAlign = "center";
@@ -186,6 +180,7 @@ function drawDimensionLines(ctx) {
 function drawSlashTick(ctx, x, y, size, leftOrTop, isVertical = false) {
 	ctx.beginPath();
 	if (!isVertical) {
+		// dimension line is horizontal
 		if (leftOrTop) {
 			ctx.moveTo(x, y);
 			ctx.lineTo(x + size * 0.5, y - size);
@@ -194,6 +189,7 @@ function drawSlashTick(ctx, x, y, size, leftOrTop, isVertical = false) {
 			ctx.lineTo(x - size * 0.5, y - size);
 		}
 	} else {
+		// dimension line is vertical
 		if (leftOrTop) {
 			ctx.moveTo(x, y);
 			ctx.lineTo(x - size, y + size * 0.5);

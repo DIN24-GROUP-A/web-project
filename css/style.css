@@ -64,7 +64,6 @@ body {
 	background: #ffc8c8; /* highlight selected row */
 }
 
-/* Dimension fields (width/height) */
 .dimension-fields {
 	margin-bottom: 1em;
 }
@@ -75,16 +74,4 @@ body {
 .dimension-fields input {
 	width: 60px;
 	margin-right: 10px;
-}
-
-/* Minimal reinforcement panel */
-.min-reinf-panel {
-	border: 1px solid #ddd;
-	padding: 5px;
-	margin-top: 10px;
-}
-.min-reinf-panel label,
-.min-reinf-panel select {
-	display: block;
-	margin-bottom: 4px;
 }
