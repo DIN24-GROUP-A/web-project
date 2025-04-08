@@ -5,6 +5,11 @@ const dotenv = require('dotenv')
 const path = require('path')
 const bodyParser = require('body-parser');
 
+const calculationRoutes = require('./routes/calculationRoutes');
+const userRoutes = require('./routes/userRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
+
 
 dotenv.config( { path:"./.env" } )
 
@@ -35,6 +40,10 @@ db.connect( (error)=> {
 // Routes
 app.use('/', require('./routes/pages'))
 app.use('/auth',require('./routes/auth'))
+app.use('/api/calculations', calculationRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/favorites', favoriteRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 
 app.listen(5000, ()=> {
