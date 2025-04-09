@@ -35,7 +35,9 @@ db.connect( (error)=> {
 // Routes
 app.use('/', require('./routes/pages'))
 app.use('/auth',require('./routes/auth'))
-
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard'); // Render your dashboard view
+});
 
 app.listen(5000, ()=> {
     console.log("Server started on port 3307")
