@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../app.js');
 
 // Get all calculations
 const getAll =  async (userId) => {
