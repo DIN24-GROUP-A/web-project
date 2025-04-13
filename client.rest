@@ -1,0 +1,19 @@
+###
+GET http://localhost:8000/test.php HTTP/1.1
+
+###
+POST https://to-do-app-server-rsyf.onrender.com/new
+Content-Type: application/json
+
+{
+  "description": "and one more"
+}
+###
+POST https://to-do-app-server-rsyf.onrender.com/ HTTP/1.1
+Content-Type: application/json
+
+{
+  "description": "and one more"
+}
+###
+DELETE https://to-do-app-server-rsyf.onrender.com/delete/3
