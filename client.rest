@@ -1,19 +1,26 @@
-###
-GET http://localhost:8000/test.php HTTP/1.1
+### 
+GET http://localhost:3001 HTTP/1.1
 
 ###
-POST https://to-do-app-server-rsyf.onrender.com/new
+GET http://localhost:3001/calculations HTTP/1.1
+
+###
+POST http://localhost:3001/new HTTP/1.1
 Content-Type: application/json
 
 {
-  "description": "and one more"
+  "name": "abc",
+  "data": "12ad",
+  "user_id": "1"
 }
 ###
-POST https://to-do-app-server-rsyf.onrender.com/ HTTP/1.1
+POST http://localhost:3001/new HTTP/1.1
 Content-Type: application/json
 
 {
-  "description": "and one more"
+  "name": "my calc",
+  "data": "something something",
+  "user_id": "2"
 }
 ###
 DELETE https://to-do-app-server-rsyf.onrender.com/delete/3
