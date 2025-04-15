@@ -10,6 +10,9 @@ router.get('/register', (req, res) =>{
 router.get('/login', (req, res) =>{
     res.render('login');
 })
+router.get('/feedback', (req, res) =>{
+    res.render('feedback');
+})
 
 
 module.exports = router;
