@@ -1,20 +1,18 @@
 const jwt = require('jsonwebtoken');
 
-const authMiddleware = (req, res, next) => {
-    const token = req.cookies.auth_token;
+exports.isLoggedIn = (req, res, next) => {
+  const token = req.cookies.auth_token;
 
-    if (!token) {
-        return res.redirect('/login');
-    }
+  if (!token) {
+    return res.redirect('/login');
+  }
 
-    jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
-        if (error) {
-            return res.redirect('/login');
-        }
-
-        req.user = decoded;
-        next();
-    });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.locals.user = decoded;  // This is passed to all views
+    next();
+  } catch (err) {
+    console.log('JWT error:', err);
+    return res.redirect('/login');
+  }
 };
-
-module.exports = authMiddleware;

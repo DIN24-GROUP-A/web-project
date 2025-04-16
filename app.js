@@ -33,11 +33,14 @@ db.connect( (error)=> {
 })
 
 // Routes
+const cookieParser = require('cookie-parser');
+const { isLoggedIn } = require('./middleware/authMiddleware');
+app.use(cookieParser());
 app.use('/', require('./routes/pages'))
 app.use('/auth',require('./routes/auth'))
-app.get('/dashboard', (req, res) => {
-    res.render('dashboard'); // Render your dashboard view
-});
+app.get('/dashboard', isLoggedIn, (req, res) => {
+    res.render('dashboard');
+  });
 
 app.listen(5000, ()=> {
     console.log("Server started on port 3307")
