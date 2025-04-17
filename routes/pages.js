@@ -39,7 +39,8 @@ router.post('/favorites', favoriteController.add);
 router.delete('/favorites/:id', favoriteController.remove);
 
 // Routes for feedback
-router.get('/feedback', isLoggedIn, feedbackController.getAll); 
+router.get('/feedback', isLoggedIn, feedbackController.getUserFeedback);
+// router.get('/admin/feedback', isLoggedIn, isAdmin, feedbackController.getAll);
 router.get('/feedback/:id', isLoggedIn, feedbackController.getById); 
 router.post('/feedback', isLoggedIn, feedbackController.add); 
 router.put('/feedback/:id', isLoggedIn, feedbackController.updateResolution); 

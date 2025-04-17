@@ -116,14 +116,28 @@ remove: async (req, res) => {
 // Feedback Controller
 const feedbackController = {
   getAll: async (req, res) => {
-    try {
-      const feedback = await Feedback.getAll(req.user.id);
-      res.render('feedback', { feedbackList: feedback })
+    try {  
+      const feedbacks = await feedbackModel.getAll();
+      res.render('adminFeedback', { feedbacks });
     } catch (err) {
       console.error(err);
-      res.status(500).render('feedback', { error: 'Failed to fetch feedback' });
+      res.status(500).render('adminFeedback', { error: 'Failed to fetch feedback' });
     }
   },
+
+  // getUserFeedback: async (req, res) => {
+  //   try {
+  //     console.log(req.session.user); 
+  //     const userId = req.session.user.id;
+  //     const feedbacks = await feedbackModel.getUserFeedback(userId);
+  //     console.log(feedbacks);  // Log feedbacks
+  //     res.render('feedback', { feedbackList: feedbacks });
+  //   } catch (err) {
+  //     console.error(err);
+  //     res.status(500).render('feedback', { error: 'Failed to fetch feedback' });
+  //   }
+  // },
+
   getById: async (req, res) => {
     try {
       const feedback = await Feedback.getById(req.params.id, req.user.id);
@@ -136,9 +150,10 @@ const feedbackController = {
       res.status(500).json({ error: 'Error retrieving feedback' });
     }
   },
+  
   add: async (req, res) => {
+    const { topic = '', message = '', isABug } = req.body;
     try {
-      const { topic, message, isABug } = req.body;
       if (!message || !topic) {
         return res
           .status(400)

@@ -117,22 +117,6 @@
             <button type="submit" class="btn-custom">Submit Feedback</button>
         </form>
     </div>
-
-    <div class="feedback-list">
-
-        {{#if feedbackList.length}}
-            {{#each feedbackList}}
-                <div class="feedback-item">
-                    <strong>Topic: {{topic}}</strong><br>
-                    <strong>{{#if isABug}}Bug{{else}}Suggestion{{/if}}:</strong> 
-                    {{message}}<br>
-                    <small>Submitted: {{created_at}}</small>
-                    {{#if resolved}}<br><span class="resolved">Resolved</span>{{/if}}
-                </div>
-            {{/each}}
-        {{else}}
-            <p>You haven’t submitted any feedback yet.</p>
-        {{/if}}
-    </div>
+    
 </body>
 </html>
