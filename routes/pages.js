@@ -1,5 +1,7 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+const { isLoggedIn, redirectIfLoggedIn } = require('../middleware/authMiddleware');
+const { isLoggedIn, redirectIfLoggedIn } = require('../middleware/authMiddleware');
 const {
     calculationController,
     favoriteController,
@@ -7,17 +9,24 @@ const {
     userController
 } = require('../controllers/controllers.js');
 
-router.get('/', (req, res) =>{
+// Public pages
+router.get('/', (req, res) => {
     res.render('index');
-})
-router.get('/register', (req, res) =>{
+  });
+  
+  router.get('/register', redirectIfLoggedIn, (req, res) => {
     res.render('register');
-})
-router.get('/login', (req, res) =>{
+  });
+  
+  router.get('/login', redirectIfLoggedIn, (req, res) => {
     res.render('login');
-})
+  });
+  
+  router.get('/feedback', (req, res) => {
+    res.render('feedback');
+  });
 
-// Routes for calculations
+  // Routes for calculations
 router.get('/calculations', calculationController.getAll); 
 router.get('/calculations/:id', calculationController.getById); 
 router.post('/calculations', calculationController.create); 
@@ -43,5 +52,7 @@ router.get('/users', userController.getAll);
 router.get('/users/:id', userController.getById); 
 router.put('/users/:id', userController.update);
 router.delete('/users/:id', userController.remove); 
+
+
 
 module.exports = router;
