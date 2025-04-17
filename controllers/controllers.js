@@ -117,26 +117,13 @@ remove: async (req, res) => {
 const feedbackController = {
   getAll: async (req, res) => {
     try {  
-      const feedbacks = await feedbackModel.getAll();
-      res.render('adminFeedback', { feedbacks });
+      const feedbacks = await Feedback.getAll();
+      res.render('feedback', { feedbacks });
     } catch (err) {
       console.error(err);
-      res.status(500).render('adminFeedback', { error: 'Failed to fetch feedback' });
+      res.status(500).render('feedback', { error: 'Failed to fetch feedback' });
     }
   },
-
-  // getUserFeedback: async (req, res) => {
-  //   try {
-  //     console.log(req.session.user); 
-  //     const userId = req.session.user.id;
-  //     const feedbacks = await feedbackModel.getUserFeedback(userId);
-  //     console.log(feedbacks);  // Log feedbacks
-  //     res.render('feedback', { feedbackList: feedbacks });
-  //   } catch (err) {
-  //     console.error(err);
-  //     res.status(500).render('feedback', { error: 'Failed to fetch feedback' });
-  //   }
-  // },
 
   getById: async (req, res) => {
     try {

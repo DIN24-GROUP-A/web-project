@@ -2,19 +2,11 @@ const db = require('../db');
 
 // Get all feedback entries
 const getAll = async () => {
-  const [rows] = await db.query (    'SELECT f.*, u.name FROM feedback f JOIN users u ON f.user_id = u.id ORDER BY f.created_at DESC'
+  const [rows] = await db.query ('SELECT f.*, u.name FROM feedback f JOIN users u ON f.user_id = u.id ORDER BY f.created_at DESC'
   );
   return rows;
 };
 
-//get all from specific user
-// const getUserFeedback = async (userId) => {
-//   const [rows] = await db.query(
-//     'SELECT * FROM feedback WHERE user_id = ? ORDER BY created_at DESC',
-//     [userId]
-//   );
-//   return rows;
-// }
 // Get a specific feedback entry by ID
 const getById = async (id, userId) => {
   const [rows] = await db.query(
@@ -54,7 +46,6 @@ const remove = async (id, userId) => {
 // Export functions
 module.exports = {
   getAll,
-  // getUserFeedback,
   getById,
   add,
   updateResolution,

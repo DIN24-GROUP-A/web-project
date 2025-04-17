@@ -11,21 +11,17 @@ const {
 // Public pages
 router.get('/', (req, res) => {
     res.render('index');
-  });
-  
-  router.get('/register', redirectIfLoggedIn, (req, res) => {
-    res.render('register');
-  });
-  
-  router.get('/login', redirectIfLoggedIn, (req, res) => {
-    res.render('login');
-  });
-  
-  router.get('/feedback', (req, res) => {
-    res.render('feedback');
-  });
+});
 
-  // Routes for calculations
+router.get('/register', redirectIfLoggedIn, (req, res) => {
+    res.render('register');
+});
+
+router.get('/login', redirectIfLoggedIn, (req, res) => {
+    res.render('login');
+});
+
+// Routes for calculations
 router.get('/calculations', calculationController.getAll); 
 router.get('/calculations/:id', calculationController.getById); 
 router.post('/calculations', calculationController.create); 
@@ -38,21 +34,17 @@ router.get('/favorites/:id', favoriteController.getById);
 router.post('/favorites', favoriteController.add); 
 router.delete('/favorites/:id', favoriteController.remove);
 
-// Routes for feedback
-router.get('/feedback', isLoggedIn, feedbackController.getUserFeedback);
-// router.get('/admin/feedback', isLoggedIn, isAdmin, feedbackController.getAll);
+// Protected feedback routes
+router.get('/feedback', isLoggedIn, feedbackController.getAll); 
 router.get('/feedback/:id', isLoggedIn, feedbackController.getById); 
 router.post('/feedback', isLoggedIn, feedbackController.add); 
 router.put('/feedback/:id', isLoggedIn, feedbackController.updateResolution); 
-router.delete('/feedback/:id', isLoggedIn, feedbackController.remove); 
-
+router.delete('/feedback/:id', isLoggedIn, feedbackController.remove);
 
 // Routes for users
 router.get('/users', userController.getAll);
 router.get('/users/:id', userController.getById); 
 router.put('/users/:id', userController.update);
 router.delete('/users/:id', userController.remove); 
-
-
 
 module.exports = router;
