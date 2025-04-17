@@ -19,10 +19,10 @@ const getById = async (id, userId) => {
 };
 
 // Add new feedback
-const add = async (userId, message) => {
+const add = async (userId, topic, message, isABug) => {
   const [result] = await db.query(
-    'INSERT INTO feedback (user_id, message) VALUES (?, ?)',
-    [userId, message]
+    'INSERT INTO feedback (user_id, topic, message, isABug) VALUES (?, ?, ?, ?)',
+    [userId, topic, message, isABug]
   );
   return result.insertId;
 };

@@ -23,6 +23,8 @@ app.use(express.urlencoded({extended:false }))
 app.use(express.json())
 
 app.set('view engine', 'hbs')
+app.set('views', path.join(__dirname, 'views'));
+
 
 db.connect( (error)=> {
     if(error){

@@ -138,14 +138,26 @@ const feedbackController = {
   },
   add: async (req, res) => {
     try {
-      const { message } = req.body;
-      const id = await Feedback.add(req.user.id, message);
-      res.status(201).json({ id });
+      const { topic, message, isABug } = req.body;
+      if (!message || !topic) {
+        return res
+          .status(400)
+          .render('feedback-form', { error: 'Message and topic are required', topic, message });
+      }
+      const userId = res.locals.user?.id;
+      if (!userId) {
+        return res
+          .status(401)
+          .render('feedback-form', { error: 'Unauthorized. Please log in.', topic, message });
+      }
+      await Feedback.add(userId, topic, message, isABug ? 1 : 0);
+      res.redirect('/feedback');
     } catch (err) {
       console.error(err);
-      res.status(400).json({ error: 'Error adding feedback' });
+      res.status(500).render('feedback-form', { error: 'Error adding feedback' });
     }
   },
+
   updateResolution: async (req, res) => {
     try {
       const { resolved } = req.body;
