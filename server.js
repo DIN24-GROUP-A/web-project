@@ -6,6 +6,8 @@ const mysql = require('mysql2/promise');
 const app = express();
 app.use(cors());
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+
 const port = 3001;
 
 const pool = mysql.createPool({
@@ -59,6 +61,9 @@ app.get("/calculations", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}.`)

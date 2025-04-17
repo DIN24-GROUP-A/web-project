@@ -9,9 +9,9 @@ POST http://localhost:3001/new HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "abc",
-  "data": "12ad",
-  "user_id": "1"
+  "name": "qwerty",
+  "data": "12adaaaa",
+  "user_id": "2"
 }
 ###
 POST http://localhost:3001/new HTTP/1.1

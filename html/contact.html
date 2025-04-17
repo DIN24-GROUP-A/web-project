@@ -42,7 +42,7 @@
         <h2 class="text-center mb-4">Contact Support</h2>
         <p class="note">Use the form below to contact us or report a bug. We'll get back to you as soon as possible.</p>
 
-        <form action="/submit-contact-form" method="POST">
+        <form action="/api/feedback" method="POST">
             <div class="mb-3">
                 <input type="text" class="form-control" placeholder="Your Name" required>
             </div>
@@ -52,10 +52,6 @@
             <div class="mb-3">
                 <textarea class="form-control" rows="4" placeholder="Your Message" required></textarea>
             </div>
-            <div class="checkbox-container">
-                <input type="checkbox" id="bugReport" name="bugReport">
-                <label for="bugReport">This is a bug report</label>
-              </div>
             <button type="submit" class="btn btn-custom w-100">Send Message</button>
         </form>
         <h4 class="mt-4">Common Queries</h4>
