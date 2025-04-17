@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Feedback</title>
+    <title>Contact Us</title>
 <style>
     body {
         background-color: #222;
@@ -96,10 +96,6 @@
     <div class="feedback-container">
         <h1>Contact Us</h1>
 
-        {{#if message}}
-            <p style="color: lightgreen;">{{message}}</p>
-        {{/if}}
-
         <form action="/feedback" method="POST">
             <label for="topic">Topic:</label>
             <select name="topic" id="topic" class="form-control" required>
@@ -123,16 +119,15 @@
     </div>
 
     <div class="feedback-list">
-        <h2>Your Feedback</h2>
 
         {{#if feedbackList.length}}
             {{#each feedbackList}}
                 <div class="feedback-item">
                     <strong>Topic: {{topic}}</strong><br>
-                    <strong>{{#if isABug}}🐛 Bug{{else}}💬 Suggestion{{/if}}:</strong> 
+                    <strong>{{#if isABug}}Bug{{else}}Suggestion{{/if}}:</strong> 
                     {{message}}<br>
                     <small>Submitted: {{created_at}}</small>
-                    {{#if resolved}}<br><span class="resolved">✅ Resolved</span>{{/if}}
+                    {{#if resolved}}<br><span class="resolved">Resolved</span>{{/if}}
                 </div>
             {{/each}}
         {{else}}

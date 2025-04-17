@@ -39,11 +39,11 @@ router.post('/favorites', favoriteController.add);
 router.delete('/favorites/:id', favoriteController.remove);
 
 // Routes for feedback
-router.get('/feedback', feedbackController.getAll); 
-router.get('/feedback/:id', feedbackController.getById); 
-router.post('/feedback', feedbackController.add); 
-router.put('/feedback/:id', feedbackController.updateResolution); 
-router.delete('/feedback/:id', feedbackController.remove); 
+router.get('/feedback', isLoggedIn, feedbackController.getAll); 
+router.get('/feedback/:id', isLoggedIn, feedbackController.getById); 
+router.post('/feedback', isLoggedIn, feedbackController.add); 
+router.put('/feedback/:id', isLoggedIn, feedbackController.updateResolution); 
+router.delete('/feedback/:id', isLoggedIn, feedbackController.remove); 
 
 
 // Routes for users

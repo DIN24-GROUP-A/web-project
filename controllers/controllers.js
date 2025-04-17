@@ -118,10 +118,10 @@ const feedbackController = {
   getAll: async (req, res) => {
     try {
       const feedback = await Feedback.getAll(req.user.id);
-      res.json(feedback);
+      res.render('feedback', { feedbackList: feedback })
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Failed to fetch feedback' });
+      res.status(500).render('feedback', { error: 'Failed to fetch feedback' });
     }
   },
   getById: async (req, res) => {
@@ -142,19 +142,23 @@ const feedbackController = {
       if (!message || !topic) {
         return res
           .status(400)
-          .render('feedback-form', { error: 'Message and topic are required', topic, message });
+          .render('feedback', { error: 'Message and topic are required', topic: topic || '', message: message || '' });
       }
       const userId = res.locals.user?.id;
       if (!userId) {
         return res
           .status(401)
-          .render('feedback-form', { error: 'Unauthorized. Please log in.', topic, message });
+          .render('feedback', { error: 'Unauthorized. Please log in.', topic: topic || '', message: message || '' });
       }
       await Feedback.add(userId, topic, message, isABug ? 1 : 0);
       res.redirect('/feedback');
     } catch (err) {
       console.error(err);
-      res.status(500).render('feedback-form', { error: 'Error adding feedback' });
+      res.status(500).render('feedback', {
+        error: 'Error adding feedback',
+        topic: topic || '',
+        message: message || '',
+      });
     }
   },
 
