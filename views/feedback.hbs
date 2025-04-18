@@ -1,24 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+<style>
+    body {
+        background-color: #222;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        min-height: 100vh;
+        font-family: sans-serif;
+    }
 
+    .feedback-container {
+        background: #333;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 500px;
+    }
+
+    textarea, input[type="checkbox"], select {
+        width: 100%;
+        background: #444;
+        border: none;
+        color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        resize: vertical;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px; /* Ensures spacing between label and input */
+    }
+
+    /* Fix for checkbox alignment */
+    label input[type="checkbox"] {
+        width: auto;
+        margin-right: 10px;
+        vertical-align: middle;
+    }
+
+    .btn-custom {
+        background: #ffcc00;
+        color: #222;
+        font-weight: bold;
+        border-radius: 5px;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-custom:hover {
+        background: #ffaa00;
+    }
+
+    .feedback-list {
+        margin-top: 40px;
+        background: #333;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .feedback-item {
+        border-bottom: 1px solid #555;
+        padding: 10px 0;
+    }
+
+    .feedback-item:last-child {
+        border-bottom: none;
+    }
+
+    small {
+        color: #aaa;
+    }
+
+    .resolved {
+        color: lightgreen;
+    }
+</style>
 </head>
 <body>
-  {{#if message}}
-    <p style="color:red">{{message}}</p>
-  {{/if}}
+    <div class="feedback-container">
+        <h1>Contact Us</h1>
 
-  <form action="/auth/login" method="POST">
-    <label for="email">Email:</label>
-    <input type="email" name="email" required /><br><br>
+        <form action="/feedback" method="POST">
+            <label for="topic">Topic:</label>
+            <select name="topic" id="topic" class="form-control" required>
+                <option value="General Question">General Question</option>
+                <option value="Bug">Bug</option>
+                <option value="Feature Request">Feature Request</option>
+                <option value="Other">Other</option>
+            </select>
+            <br>
 
-    <label for="password">Password:</label>
-    <input type="password" name="password" required /><br><br>
+            <label for="message">Your Message:</label>
+            <textarea name="message" id="message" rows="5" required placeholder="Write your message..."></textarea>
 
-    <button type="submit">Login</button>
-  </form>
+            <label>
+                <input type="checkbox" name="isABug" value="true">
+                This is a bug report
+            </label>
+
+            <button type="submit" class="btn-custom">Submit Feedback</button>
+        </form>
+    </div>
+    
 </body>
 </html>
