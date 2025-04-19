@@ -48,10 +48,21 @@ router.get('/dashboard', isLoggedIn, (req, res) => {
         console.error(err);
         return res.status(500).send('Server error');
       }
-      res.render('dashboard', {
-        name: user.name,
-        isAdmin: true,
-        users: results
+
+      // Fetch feedback data from the 'feedback' table
+      db.query('SELECT feedback.id, users.name AS user_name, feedback.topic, feedback.message, feedback.isABug, feedback.resolved, feedback.created_at FROM feedback JOIN users ON feedback.user_id = users.id ORDER BY feedback.created_at DESC', (err, feedbackResults) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Error fetching feedback');
+        }
+
+        // Render dashboard with both users and feedback
+        res.render('dashboard', {
+          name: user.name,
+          isAdmin: true,
+          users: results,
+          feedbacks: feedbackResults
+        });
       });
     });
   } else {
@@ -63,6 +74,20 @@ router.get('/dashboard', isLoggedIn, (req, res) => {
   }
 });
 
+router.post('/feedback/resolve/:id', isLoggedIn, (req, res) => {
+  const user = res.locals.user;
+  if (!user.is_admin) return res.status(403).send('Access denied');
+
+  const feedbackId = req.params.id;
+
+  db.query('UPDATE feedback SET resolved = TRUE WHERE id = ?', [feedbackId], (err) => {
+    if (err) {
+      console.error('Error updating feedback:', err);
+      return res.status(500).send('Server error');
+    }
+    res.redirect('/dashboard');
+  });
+});
 
 
 
