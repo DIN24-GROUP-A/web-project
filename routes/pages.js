@@ -24,6 +24,15 @@ router.get('/login', redirectIfLoggedIn, (req, res) => {
   res.render('login');
 });
 
+// Logout route
+router.get('/logout', (req, res) => {
+  // Clear the JWT token stored in the cookies
+  res.clearCookie('auth_token');  // This removes the token from the user's browser
+  
+  // Redirect to the home page after logging out
+  return res.redirect('/');  // Redirecting to the home page '/'
+});
+
 router.get('/feedback', (req, res) => {
   res.render('feedback');
 });
