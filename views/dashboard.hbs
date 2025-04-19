@@ -10,7 +10,41 @@
 
 </head>
 <body>
-    <h1>Welcome, {{user.name}}!</h1>
+    <h1>Welcome, {{name}}!</h1>
+
+{{#if isAdmin}}
+  <h2>Admin Panel</h2>
+  <table border="1" cellpadding="8">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each users}}
+        <tr>
+          <td>{{this.name}}</td>
+          <td>{{this.email}}</td>
+          <td>{{#if this.is_admin}}Admin{{else}}User{{/if}}</td>
+          <td>
+            {{#unless this.is_admin}}
+              <form action="/auth/make-admin/{{this.id}}" method="POST" style="display:inline">
+                <button type="submit">Promote</button>
+              </form>
+            {{/unless}}
+            <form action="/auth/delete-user/{{this.id}}" method="POST" style="display:inline">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+{{/if}}
+
 
 </body>
 </html>

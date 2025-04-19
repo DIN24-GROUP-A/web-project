@@ -77,10 +77,22 @@ exports.login = (req, res) => {
         }
 
         // Create a JWT token
-        const token = jwt.sign({ id: user.id, email: user.email,  name: user.name }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            is_admin: user.is_admin
+          }, process.env.JWT_SECRET, {
+            expiresIn: '1h'
+          });
 
         // Send the token as a cookie or use it for session management
-        res.cookie('auth_token', token, { httpOnly: true, secure: true });
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: false, // use true in production (with HTTPS)
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+          });
 
         // Redirect to a protected page/dashboard
         return res.redirect('/dashboard');
