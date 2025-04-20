@@ -13,7 +13,10 @@ const db = mysql.createConnection({
 });
 
 router.get('/', (req, res) => {
-  res.render('index');
+  const user = res.locals.user; // set by middleware
+  res.render('index', {
+    name: user ? user.name : null
+  });
 });
 
 router.get('/register', redirectIfLoggedIn, (req, res) => {

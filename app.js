@@ -6,6 +6,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const exphbs = require('express-handlebars');
 const cookieParser = require('cookie-parser');
+const { attachUser } = require('./middleware/authMiddleware');
 
 dotenv.config({ path: './.env' });
 
@@ -17,6 +18,7 @@ const db = mysql.createConnection({
     port: process.env.PORT,
 });
 
+app.use(cookieParser());
 const publicDirectory = path.join(__dirname, './frontend');
 app.use(express.static(publicDirectory));
 
@@ -36,6 +38,8 @@ app.set('view engine', 'hbs');
 
 app.use(express.static('frontend')); // Serving static files
 
+app.use(attachUser);
+
 // Connect to MySQL
 db.connect((error) => {
     if (error) {
@@ -46,9 +50,31 @@ db.connect((error) => {
 });
 
 // Routes
-app.use(cookieParser());
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));
+
+
+const jwt = require('jsonwebtoken');
+
+app.use((req, res, next) => {
+  const token = req.cookies.auth_token;
+
+  if (!token) {
+    res.locals.user = null;
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.locals.user = decoded;  // Make it available in views
+  } catch (err) {
+    res.locals.user = null;
+  }
+
+  next();
+});
+
+
 
 // Start the server
 app.listen(5000, () => {
