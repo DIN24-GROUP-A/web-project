@@ -24,7 +24,9 @@ router.get('/register', redirectIfLoggedIn, (req, res) => {
 });
 
 router.get('/login', redirectIfLoggedIn, (req, res) => {
-  res.render('login');
+  res.render('login', {
+    message: req.query.message || null  // Check if message exists in the query string
+});
 });
 
 // Logout route
@@ -39,7 +41,6 @@ router.get('/logout', (req, res) => {
 router.get('/feedback', (req, res) => {
   res.render('feedback');
 });
-
 
 router.get('/dashboard', isLoggedIn, (req, res) => {
   const user = res.locals.user;
@@ -77,22 +78,40 @@ router.get('/dashboard', isLoggedIn, (req, res) => {
   }
 });
 
-router.post('/feedback/resolve/:id', isLoggedIn, (req, res) => {
-  const user = res.locals.user;
-  if (!user.is_admin) return res.status(403).send('Access denied');
-
+router.post('/feedback/resolve/:id', (req, res) => {
   const feedbackId = req.params.id;
-
-  db.query('UPDATE feedback SET resolved = TRUE WHERE id = ?', [feedbackId], (err) => {
+  db.query('UPDATE feedback SET resolved = 1 WHERE id = ?', [feedbackId], (err) => {
     if (err) {
-      console.error('Error updating feedback:', err);
-      return res.status(500).send('Server error');
+      console.error(err);
+      return res.status(500).send('Error marking feedback as resolved');
     }
     res.redirect('/dashboard');
   });
 });
 
+// Promote user to admin
+router.post('/make-admin/:id', (req, res) => {
+  const userId = req.params.id;
+  db.query('UPDATE users SET is_admin = 1 WHERE id = ?', [userId], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error promoting user');
+    }
+    res.redirect('/dashboard');
+  });
+});
 
+// Delete user
+router.post('/delete-user/:id', (req, res) => {
+  const userId = req.params.id;
+  db.query('DELETE FROM users WHERE id = ?', [userId], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error deleting user');
+    }
+    res.redirect('/dashboard');
+  });
+});
 
 
 

@@ -12,35 +12,34 @@ const db = mysql.createConnection({
 });
  
 exports.register = (req, res) => {
-    const { name, email, password, confirm_password } = req.body;
+  const { name, email, password, confirm_password } = req.body;
 
-    db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
-        if (error) {
-            console.log(error);
-            return;
-        }
-        if (results.length > 0) {
-            return res.render('register', {
-                message: 'Email already in use! Try logging in.'
-            });
-        } else if (password !== confirm_password) {
-            return res.render('register', {
-                message: 'Passwords do not match'
-            });
-        }
+  db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
+      if (error) {
+          console.log(error);
+          return;
+      }
+      if (results.length > 0) {
+          return res.render('register', {
+              message: 'Email already in use! Try logging in.'
+          });
+      } else if (password !== confirm_password) {
+          return res.render('register', {
+              message: 'Passwords do not match'
+          });
+      }
 
-        let hashedPassword = await bcrypt.hash(password, 8);
+      let hashedPassword = await bcrypt.hash(password, 8);
 
-        db.query('INSERT INTO users SET ?', { name: name, email: email, password: hashedPassword }, (error, results) => {
-            if (error) {
-                console.log(error);
-            } else {
-                return res.render('register', {
-                    message: 'User Successfully Created'
-                });
-            }
-        });
-    });
+      db.query('INSERT INTO users SET ?', { name: name, email: email, password: hashedPassword }, (error, results) => {
+          if (error) {
+              console.log(error);
+          } else {
+              // Redirect to the login page with a success message
+              return res.redirect('/login?message=User successfully created. You can now log in!');
+          }
+      });
+  });
 };
 
 exports.login = (req, res) => {
