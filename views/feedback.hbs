@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+    <div class="container">
+
+    <div class="feedback-container">
+        <h1>Contact Us</h1>
+
+        <form action="/feedback" method="POST">
+            <label for="topic">Topic:</label>
+            <select name="topic" id="topic" class="form-control" required>
+                <option value="General Question">General Question</option>
+                <option value="Bug">Bug</option>
+                <option value="Feature Request">Feature Request</option>
+                <option value="Other">Other</option>
+            </select>
+            <br>
+
+            <label for="message">Your Message:</label>
+            <textarea name="message" id="message" rows="5" required placeholder="Write your message..."></textarea>
+
+            <label>
+                <input type="checkbox" name="isABug" value="true">
+                This is a bug report
+            </label>
+
+            <button type="submit" class="btn-custom">Submit Feedback</button>
+        </form>
+    </div>
+    </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
