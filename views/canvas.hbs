@@ -1,0 +1,83 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Minimum Reinforcement Editor</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/style.css" />
+	</head>
+	<body>
+		<div id="side-panel">
+			<h3>Available Rebars</h3>
+			<div class="rebar-icon" draggable="true" data-diameter="16">16mm</div>
+			<div class="rebar-icon" draggable="true" data-diameter="20">20mm</div>
+			<div class="rebar-icon" draggable="true" data-diameter="25">25mm</div>
+		</div>
+
+		<div id="main-area">
+			<canvas id="myCanvas" width="700" height="500"></canvas>
+		</div>
+
+		<div id="properties-panel">
+			<h3>Concrete Cross-Section</h3>
+			<div class="dimension-fields">
+				<label for="widthInput">Width:</label>
+				<input id="widthInput" type="number" step="1" value="500" />
+
+				<label for="heightInput">Height:</label>
+				<input id="heightInput" type="number" step="1" value="300" />
+			</div>
+
+			<h3>Rebar List</h3>
+			<table id="rebarTable">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>X</th>
+						<th>Y</th>
+						<th>Diameter</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+
+			<h3>Minimal Reinforcement Check</h3>
+			<label for="elementType">Element Type:</label>
+			<select id="elementType">
+				<option value="beam">Beam (bending)</option>
+				<option value="column">Column (compression)</option>
+				<option value="tie">Tie (tension)</option>
+			</select>
+
+			<label for="concreteGrade">Concrete Grade:</label>
+			<select id="concreteGrade">
+				{{! You can generate these dynamically later with a loop if needed }}
+				<option value="C12/15" data-fct="1.57">C12/15</option>
+				<option value="C16/20" data-fct="1.90">C16/20</option>
+				<option value="C20/25" data-fct="2.21" selected>C20/25</option>
+				<option value="C25/30" data-fct="2.56">C25/30</option>
+				<option value="C30/37" data-fct="2.90">C30/37</option>
+				<option value="C35/45" data-fct="3.21">C35/45</option>
+				<option value="C40/50" data-fct="3.51">C40/50</option>
+				<option value="C45/55" data-fct="3.80">C45/55</option>
+				<option value="C50/60" data-fct="4.07">C50/60</option>
+				<option value="C55/67" data-fct="4.21">C55/67</option>
+				<option value="C60/75" data-fct="4.35">C60/75</option>
+				<option value="C70/85" data-fct="4.61">C70/85</option>
+				<option value="C80/95" data-fct="4.84">C80/95</option>
+				<option value="C90/105" data-fct="5.04">C90/105</option>
+			</select>
+
+			<label for="steelGrade">Steel Grade (fyk):</label>
+			<select id="steelGrade">
+				<option value="235">235 MPa</option>
+				<option value="500" selected>500 MPa</option>
+				<option value="600">600 MPa</option>
+			</select>
+
+			<button id="checkMinReinfBtn">Check Min Reinforcement</button>
+			<p id="minReinfResult" style="font-weight: bold"></p>
+		</div>
+
+		<script type="module" src="/js/main.js"></script>
+	</body>
+</html>

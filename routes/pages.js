@@ -28,6 +28,10 @@ router.get("/register", redirectIfLoggedIn, (req, res) => {
 	res.render("register");
 });
 
+router.get("/canvas", (req, res) => {
+	res.render("canvas");
+});
+
 router.get("/login", redirectIfLoggedIn, (req, res) => {
 	res.render("login", {
 		message: req.query.message || null, // Check if message exists in the query string
