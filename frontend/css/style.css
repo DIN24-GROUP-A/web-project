@@ -3,24 +3,23 @@
 body.dark-mode {
 	background-color: #121212;
 	color: #f1f1f1;
-  }
-  body.dark-mode .form-control {
+}
+body.dark-mode .form-control {
 	background-color: #333;
 	color: #fff;
 	border: 1px solid #555;
-  }
-  
-  
-  body.dark-mode .table {
+}
+
+body.dark-mode .table {
 	background-color: #1f1f1f;
 	color: #fff;
-  }
-  
-  body.dark-mode .table th,
-  body.dark-mode .table td {
+}
+
+body.dark-mode .table th,
+body.dark-mode .table td {
 	border-color: #444;
-  }
-  
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
@@ -28,7 +27,7 @@ body.dark-mode {
 }
 
 body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 	line-height: 1.6;
 }
 
@@ -75,7 +74,8 @@ body {
 }
 
 /* Buttons */
-.btn-custom, .btn-google {
+.btn-custom,
+.btn-google {
 	font-weight: bold;
 	border-radius: 5px;
 	width: 100%;
@@ -119,7 +119,9 @@ body {
 }
 
 /* Containers */
-.login-container, .signup-container, .feedback-container {
+.login-container,
+.signup-container,
+.feedback-container {
 	background: #333;
 	padding: 30px;
 	border-radius: 10px;
@@ -134,7 +136,9 @@ body {
 	max-width: 500px;
 }
 
-textarea, input[type="checkbox"], select {
+textarea,
+input[type="checkbox"],
+select {
 	width: 100%;
 	background: #444;
 	border: none;
@@ -261,7 +265,7 @@ small {
 }
 
 .dimension-fields input {
-	width: 60px;
+	width: 80px;
 	margin-right: 10px;
 }
 
