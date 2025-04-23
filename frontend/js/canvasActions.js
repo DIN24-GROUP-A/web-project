@@ -4,15 +4,34 @@ import { refreshCanvasAndTable } from "./main.js";
 
 /**
  * Sets up all mouse interactions on the canvas:
- * - dragging, selecting, double-click to remove, ctrl+click to copy
+ * - add rebar if active rebar button is selected and click is not on existing rebar
+ * - select or drag existing rebar
+ * - ctrl+click to copy
+ * - double-click to remove
  */
 export function initCanvasInteractions(canvas) {
 	canvas.addEventListener("mousedown", (e) => {
+		e.preventDefault(); // Prevent scrolling or default behavior
 		const rect = canvas.getBoundingClientRect();
 		const mouseX = e.clientX - rect.left;
 		const mouseY = e.clientY - rect.top;
 
 		const clickedRebar = findClickedRebar(mouseX, mouseY);
+
+		// If no rebar was clicked and a button is active, add a new rebar
+		if (!clickedRebar && appState.activeRebarDiameter !== null) {
+			const newId = getNextRebarId();
+			const newRebar = {
+				id: newId,
+				x: mouseX,
+				y: mouseY,
+				diameter: appState.activeRebarDiameter,
+			};
+			appState.rebars.push(newRebar);
+			appState.selectedRebarId = newId;
+			refreshCanvasAndTable();
+			return;
+		}
 
 		// Ctrl+click => copy rebar
 		if (clickedRebar && e.ctrlKey) {
@@ -180,7 +199,6 @@ function drawDimensionLines(ctx) {
 function drawSlashTick(ctx, x, y, size, leftOrTop, isVertical = false) {
 	ctx.beginPath();
 	if (!isVertical) {
-		// dimension line is horizontal
 		if (leftOrTop) {
 			ctx.moveTo(x, y);
 			ctx.lineTo(x + size * 0.5, y - size);
@@ -189,7 +207,6 @@ function drawSlashTick(ctx, x, y, size, leftOrTop, isVertical = false) {
 			ctx.lineTo(x - size * 0.5, y - size);
 		}
 	} else {
-		// dimension line is vertical
 		if (leftOrTop) {
 			ctx.moveTo(x, y);
 			ctx.lineTo(x - size, y + size * 0.5);

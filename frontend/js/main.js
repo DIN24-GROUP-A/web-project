@@ -6,11 +6,11 @@ import { calculateMinimalReinforcement } from "./minimalReinforcement.js";
 
 window.addEventListener("DOMContentLoaded", () => {
 	initCrossSectionControls();
+	initRebarButtons();
 
 	const canvas = document.getElementById("myCanvas");
 	if (canvas) {
 		initCanvasInteractions(canvas);
-		initDragAndDrop(canvas);
 	}
 
 	initMinimalReinforcementUI();
@@ -38,39 +38,24 @@ function initCrossSectionControls() {
 }
 
 /**************************************************
- * Drag-and-Drop for adding new rebars
+ * Rebar Button Toggle (Click-to-Activate)
  **************************************************/
-function initDragAndDrop(canvas) {
+function initRebarButtons() {
 	document.querySelectorAll(".rebar-icon").forEach((icon) => {
-		icon.addEventListener("dragstart", (e) => {
-			const diameter = icon.dataset.diameter;
-			e.dataTransfer.setData("diameter", diameter);
+		icon.addEventListener("click", (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			icon.blur(); // prevent focus from triggering layout shift
+
+			const isActive = icon.classList.contains("active");
+			document.querySelectorAll(".rebar-icon").forEach((i) => i.classList.remove("active"));
+			if (!isActive) {
+				icon.classList.add("active");
+				appState.activeRebarDiameter = parseFloat(icon.dataset.diameter);
+			} else {
+				appState.activeRebarDiameter = null;
+			}
 		});
-	});
-
-	canvas.addEventListener("dragover", (e) => {
-		e.preventDefault();
-	});
-
-	canvas.addEventListener("drop", (e) => {
-		e.preventDefault();
-		const rect = canvas.getBoundingClientRect();
-		const mouseX = e.clientX - rect.left;
-		const mouseY = e.clientY - rect.top;
-		const diameter = parseFloat(e.dataTransfer.getData("diameter") || "16");
-
-		// Create a new rebar
-		const newId = appState.rebarCounter++;
-		const newRebar = {
-			id: newId,
-			x: mouseX,
-			y: mouseY,
-			diameter,
-		};
-		appState.rebars.push(newRebar);
-
-		appState.selectedRebarId = newId;
-		refreshCanvasAndTable();
 	});
 }
 
