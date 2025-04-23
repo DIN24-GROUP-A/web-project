@@ -6,8 +6,9 @@
  */
 export const appState = {
 	rebarCounter: 1,
-	rebars: [],
-	selectedRebarId: null,
+	rebars: [], // array of { id, x, y, diameter }
+	selectedRebarId: null, // used for single-click selection
+	selectedRebarIds: [], // for multi-selection
 
 	// Cross-section:
 	crossSectionWidth: 500,
@@ -20,8 +21,13 @@ export const appState = {
 	dragOffsetX: 0,
 	dragOffsetY: 0,
 
-	// Rebar button state
+	// Rebar placement
 	activeRebarDiameter: null,
+
+	// Selection box
+	isSelecting: false,
+	selectionStart: null,
+	selectionRect: null,
 };
 
 /**
@@ -45,4 +51,14 @@ export function findClickedRebar(mouseX, mouseY) {
 		}
 	}
 	return null;
+}
+
+/**
+ * Returns all rebars within a selection box
+ */
+export function findRebarsInBox(x1, y1, x2, y2) {
+	const [left, right] = [Math.min(x1, x2), Math.max(x1, x2)];
+	const [top, bottom] = [Math.min(y1, y2), Math.max(y1, y2)];
+
+	return appState.rebars.filter((r) => r.x >= left && r.x <= right && r.y >= top && r.y <= bottom);
 }
