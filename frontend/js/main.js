@@ -1,6 +1,6 @@
 // main.js
 import { appState } from "./data.js";
-import { initCanvasInteractions, renderCanvas } from "./canvasActions.js";
+import { initCanvasInteractions, renderCanvas, alignSelectedRebars } from "./canvasActions.js";
 import { renderRebarList } from "./rebarTable.js";
 import { calculateMinimalReinforcement } from "./minimalReinforcement.js";
 
@@ -8,6 +8,12 @@ window.addEventListener("DOMContentLoaded", () => {
 	initCrossSectionControls();
 	initRebarButtons();
 	initRebarTableKeyListeners();
+	document.getElementById("alignHorizontalBtn")?.addEventListener("click", () => alignSelectedRebars("horizontal"));
+	document.getElementById("alignVerticalBtn")?.addEventListener("click", () => alignSelectedRebars("vertical"));
+	document
+		.getElementById("spaceHorizontalBtn")
+		?.addEventListener("click", () => alignSelectedRebars("space-horizontal"));
+	document.getElementById("spaceVerticalBtn")?.addEventListener("click", () => alignSelectedRebars("space-vertical"));
 
 	const canvas = document.getElementById("myCanvas");
 	if (canvas) {

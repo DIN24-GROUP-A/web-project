@@ -28,6 +28,9 @@ export const appState = {
 	isSelecting: false,
 	selectionStart: null,
 	selectionRect: null,
+
+	// offsets for moving multiple
+	dragOffsets: {},
 };
 
 /**

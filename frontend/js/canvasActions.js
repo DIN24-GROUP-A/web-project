@@ -32,7 +32,6 @@ export function initCanvasInteractions(canvas) {
 		if (!clickedRebar && e.button === 0 && appState.activeRebarDiameter === null) {
 			appState._pendingSelection = true;
 			appState.selectedRebarId = null;
-			appState.selectedRebarIds = [];
 		} else if (clickedRebar && e.ctrlKey) {
 			const newId = getNextRebarId();
 			const newRebar = {
@@ -45,8 +44,12 @@ export function initCanvasInteractions(canvas) {
 			appState.selectedRebarIds = [newId];
 			appState.selectedRebarId = newId;
 			appState.isDragging = true;
-			appState.dragOffsetX = mouseX - newRebar.x;
-			appState.dragOffsetY = mouseY - newRebar.y;
+			appState.dragOffsets = {
+				[newRebar.id]: {
+					dx: mouseX - newRebar.x,
+					dy: mouseY - newRebar.y,
+				},
+			};
 		} else if (clickedRebar) {
 			if (!e.shiftKey) {
 				appState.selectedRebarIds = [clickedRebar.id];
@@ -57,8 +60,16 @@ export function initCanvasInteractions(canvas) {
 			}
 			appState.selectedRebarId = clickedRebar.id;
 			appState.isDragging = true;
-			appState.dragOffsetX = mouseX - clickedRebar.x;
-			appState.dragOffsetY = mouseY - clickedRebar.y;
+			appState.dragOffsets = {};
+			appState.selectedRebarIds.forEach((id) => {
+				const rebar = appState.rebars.find((r) => r.id === id);
+				if (rebar) {
+					appState.dragOffsets[id] = {
+						dx: mouseX - rebar.x,
+						dy: mouseY - rebar.y,
+					};
+				}
+			});
 		}
 		refreshCanvasAndTable();
 	});
@@ -100,8 +111,11 @@ export function initCanvasInteractions(canvas) {
 			appState.selectedRebarIds.forEach((id) => {
 				const rebar = appState.rebars.find((r) => r.id === id);
 				if (rebar) {
-					rebar.x = mouseX - appState.dragOffsetX;
-					rebar.y = mouseY - appState.dragOffsetY;
+					const offset = appState.dragOffsets[id];
+					if (offset) {
+						rebar.x = mouseX - offset.dx;
+						rebar.y = mouseY - offset.dy;
+					}
 				}
 			});
 			refreshCanvasAndTable();
@@ -109,13 +123,22 @@ export function initCanvasInteractions(canvas) {
 	});
 
 	canvas.addEventListener("mouseup", () => {
-		if (appState.isSelecting && appState.selectionRect) {
+		// stop dragging if active
+		const wasDragging = appState.isDragging;
+		appState.dragOffsets = {};
+		const wasSelecting = appState.isSelecting && appState.selectionRect;
+
+		// if box selection happened, select those rebars
+		if (wasSelecting) {
 			const { x1, y1, x2, y2 } = appState.selectionRect;
 			const selected = findRebarsInBox(x1, y1, x2, y2);
 			appState.selectedRebarIds = selected.map((r) => r.id);
+		} else if (!wasDragging && !wasSelecting) {
+			// Only clear selection if click without dragging or selection
+			appState.selectedRebarIds = [];
 		}
 
-		// Clear selection state
+		// Clear temporary interaction state
 		appState.isSelecting = false;
 		appState._pendingSelection = false;
 		appState.selectionRect = null;
@@ -242,4 +265,33 @@ function drawSlashTick(ctx, x, y, size, leftOrTop, isVertical = false) {
 		}
 	}
 	ctx.stroke();
+}
+
+export function alignSelectedRebars(mode) {
+	const selected = appState.rebars.filter((r) => appState.selectedRebarIds.includes(r.id));
+	if (selected.length < 2) return;
+
+	if (mode === "horizontal") {
+		const avgY = selected.reduce((sum, r) => sum + r.y, 0) / selected.length;
+		selected.forEach((r) => (r.y = avgY));
+	} else if (mode === "vertical") {
+		const avgX = selected.reduce((sum, r) => sum + r.x, 0) / selected.length;
+		selected.forEach((r) => (r.x = avgX));
+	} else if (mode === "space-horizontal") {
+		const sorted = [...selected].sort((a, b) => a.x - b.x);
+		if (sorted.length < 2) return;
+		const min = sorted[0].x;
+		const max = sorted[sorted.length - 1].x;
+		const step = (max - min) / (sorted.length - 1);
+		sorted.forEach((r, i) => (r.x = min + i * step));
+	} else if (mode === "space-vertical") {
+		const sorted = [...selected].sort((a, b) => a.y - b.y);
+		if (sorted.length < 2) return;
+		const min = sorted[0].y;
+		const max = sorted[sorted.length - 1].y;
+		const step = (max - min) / (sorted.length - 1);
+		sorted.forEach((r, i) => (r.y = min + i * step));
+	}
+
+	refreshCanvasAndTable();
 }
