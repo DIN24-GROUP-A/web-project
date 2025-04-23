@@ -7,10 +7,12 @@ import { calculateMinimalReinforcement } from "./minimalReinforcement.js";
 window.addEventListener("DOMContentLoaded", () => {
 	initCrossSectionControls();
 	initRebarButtons();
+	initRebarTableKeyListeners();
 
 	const canvas = document.getElementById("myCanvas");
 	if (canvas) {
 		initCanvasInteractions(canvas);
+		// Removed drag-and-drop logic
 	}
 
 	initMinimalReinforcementUI();
@@ -60,6 +62,17 @@ function initRebarButtons() {
 }
 
 /**************************************************
+ * Enable Enter key for rebar table edits
+ **************************************************/
+function initRebarTableKeyListeners() {
+	document.addEventListener("keydown", (e) => {
+		if (e.key === "Enter" && e.target.closest("#rebarTable")) {
+			e.target.blur(); // trigger blur event to apply value
+		}
+	});
+}
+
+/**************************************************
  * Minimal Reinforcement UI
  **************************************************/
 function initMinimalReinforcementUI() {
@@ -80,4 +93,5 @@ export function refreshCanvasAndTable() {
 	const ctx = canvas.getContext("2d");
 	renderCanvas(ctx);
 	renderRebarList();
+	document.querySelectorAll("#rebarTable input").forEach((input) => input.blur());
 }

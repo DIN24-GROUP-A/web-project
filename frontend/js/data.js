@@ -6,7 +6,7 @@
  */
 export const appState = {
 	rebarCounter: 1,
-	rebars: [], // array of { id, x, y, diameter }
+	rebars: [],
 	selectedRebarId: null,
 
 	// Cross-section:
@@ -19,6 +19,9 @@ export const appState = {
 	isDragging: false,
 	dragOffsetX: 0,
 	dragOffsetY: 0,
+
+	// Rebar button state
+	activeRebarDiameter: null,
 };
 
 /**

@@ -248,6 +248,8 @@ body {
 	border-left: 1px solid #ddd;
 	padding: 10px;
 	overflow-y: auto;
+	max-height: 80vh;
+	overflow-y: auto;
 }
 
 /* Table */
