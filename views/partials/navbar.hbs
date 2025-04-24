@@ -1,13 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-main">
 	<div class="container d-flex justify-content-between align-items-center">
-		<a class="navbar-brand" href="/">Elogorithms</a>
+		<a class="navbar-brand" href="{{#if user}}/dashboard{{else}}/{{/if}}">Elogorithms</a>
 
 		<ul class="navbar-nav d-flex flex-row gap-3 mb-0 align-items-center">
 			<li class="nav-item">
 				<a class="nav-link" href="/feedback">Contact Us</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="/canvas">Minimum reinforsment calculation</a>
+				<a class="nav-link" href="/canvas">Minimum reinforcement calculation</a>
 			</li>
 
 			{{#if user}}
