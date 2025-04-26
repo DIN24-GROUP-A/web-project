@@ -93,7 +93,7 @@ exports.login = (req, res) => {
       if (user.is_admin) {
         return res.redirect('/dashboard');
       } else {
-        return res.redirect('/');
+        return res.redirect('/dashboard');
       }
     });
   };

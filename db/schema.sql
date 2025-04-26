@@ -6,7 +6,7 @@ CREATE TABLE users (
     is_admin BOOLEAN DEFAULT false
 );
 
--- Execude the below command if you already have a table created and want to add just the admin column
+-- Exclude the below command if you already have a table created and want to add just the admin column
 -- ALTER TABLE users ADD COLUMN is_admin BOOLEAN DEFAULT false;
 
 

@@ -17,6 +17,23 @@
 			padding: 8px; margin-bottom: 8px; text-align: center; cursor: grab; font-weight: 500; } #myCanvas { max-width:
 			100%; border-radius: 6px; box-shadow: 0 0 8px rgba(0,0,0,0.1); } .dimension-fields { display: flex; gap: 1rem; }
 			.rebar-list-container { margin-top: auto; }
+
+			body.dark-mode .modal-content {
+  background-color: #333; /* dark grey background */
+  color: #eee; /* light text */
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  background-color: #444; 
+  border-color: #555; 
+}
+
+body.dark-mode .btn-close {
+  filter: invert(1);
+}
+
+			
 		</style>
 	</head>
 
@@ -160,14 +177,16 @@
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<p>Welcome to the Minimum Reinforcement Editor!</p>
-						<ul>
-							<li>Select a rebar icon from the options provided.</li>
-         		 	<li>Click on the canvas to place the selected rebar.</li>							<li>Use the alignment and distribution buttons to organize rebars.</li>
-							<li>Enter the cross-section dimensions and material grades.</li>
-							<li>Click <strong>"Check Min Reinforcement"</strong> to evaluate minimum reinforcement.</li>
-							<li>Use the dark mode toggle if you wish.</li>
-						</ul>
+					<ul>
+						<li>Select a rebar icon from the options provided.</li>
+						<li>Click on the canvas to place the selected rebar.</li>
+						<li>To select multiple rebars, first unselect the active rebar icon, then click and drag on the canvas to create a selection box around the rebars you want to select.</li>
+						<li>Use the alignment and distribution buttons to organize the selected rebars.</li>
+						<li>Double-click on a rebar to remove it from the canvas.</li>
+						<li>Enter the cross-section dimensions and material grades.</li>
+						<li>Click <strong>"Check Min Reinforcement"</strong> to evaluate minimum reinforcement.</li>
+						<li>Use the dark mode toggle if you wish.</li>
+					</ul>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
