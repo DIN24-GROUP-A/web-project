@@ -4,9 +4,9 @@
 **Group:** Group A  
 **Members:**
 
-- [Gleb Bulygin](https://github.com/orgs/DIN24-GROUP-A/people/gllbhh)
-- [Alicja Williams](https://github.com/orgs/DIN24-GROUP-A/people/alaWilliams)
-- [Hammad Atif](https://github.com/orgs/DIN24-GROUP-A/people/h7mmxd)
+- [Gleb Bulygin](https://github.com/gllbhh)
+- [Alicja Williams](https://github.com/alaWilliams)
+- [Hammad Atif](https://github.com/h7mmxd)
 
 ---
 
@@ -21,7 +21,15 @@ The **Modular Reinforcement Editor** is a web-based application designed to assi
 
 The project combines **Node.js** backend services with a **vanilla JavaScript** frontend using **HTML5 Canvas** for drawing and editing reinforcement layouts.
 
+The project was deployed at Digital Ocean
+
 ---
+
+## Deployment
+
+The project is deployed on a **DigitalOcean Droplet** and can be accessed here:
+
+🔗 [http://167.172.176.169/](http://167.172.176.169/)
 
 ## Features
 
