@@ -1,4 +1,4 @@
-# Modular Reinforcement Editor
+# Reinforcement Editor
 
 **Course:** Web Programming Project  
 **Group:** Group A  
