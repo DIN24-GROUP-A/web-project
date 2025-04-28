@@ -3,13 +3,26 @@
 		<a class="navbar-brand" href="{{#if user}}/dashboard{{else}}/{{/if}}">Elogorithms</a>
 
 		<ul class="navbar-nav d-flex flex-row gap-3 mb-0 align-items-center">
-			<li class="nav-item">
-				<a class="nav-link" href="/canvas">Minimum reinforcement calculation</a>
+			<!-- Applications Dropdown -->
+			<li class="nav-item dropdown">
+				<a
+					class="nav-link dropdown-toggle"
+					href="#"
+					id="applicationsDropdown"
+					role="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				>
+					Applications
+				</a>
+				<ul class="dropdown-menu" aria-labelledby="applicationsDropdown">
+					<li><a class="dropdown-item" href="/canvas">Reinforcement Calculator</a></li>
+				</ul>
 			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" href="/feedback">Contact Us</a>
 			</li>
-			
 
 			{{#if user}}
 				<!-- Dropdown for Logged-in User -->
