@@ -12,13 +12,6 @@
 
     <div class="feedback-container">
         <h1>Contact Us</h1>
-        {{#if success}}
-        <div class="alert alert-success">{{success}}</div>
-        {{/if}}
-
-        {{#if error}}
-        <div class="alert alert-danger">{{error}}</div>
-        {{/if}}
         <form action="/feedback" method="POST">
             <label for="topic">Topic:</label>
             <select name="topic" id="topic" class="form-control" required>
